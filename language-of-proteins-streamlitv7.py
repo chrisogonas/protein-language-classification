@@ -4,7 +4,8 @@ import plotly.figure_factory as ff
 import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
-from utils import splitchain,contains_specific_letters,TransformACP,TransformAMP
+import re
+from utils import splitchain,contains_specific_letters,TransformACP,TransformAMP,TransformDNA
 import platform
 from packaging import version
 if version.parse(platform.python_version()) < version.parse("3.8.0"):
@@ -20,7 +21,7 @@ else:
 
 acp_model = pickle.load(open('xgb_acp_model.sav', 'rb'))
 amp_model = pickle.load(open('xgb_amp_model.sav', 'rb'))
-dna_model = pickle.load(open('xgb_acp_model.sav', 'rb'))
+dna_model = pickle.load(open('xgb_dna_binding_model.sav', 'rb'))
 
 # initialize test results
 resultsacp = ''
@@ -34,10 +35,10 @@ st.markdown("<h1 style='text-align: center; color: black;'>Learning The Language
 st.markdown("<h1 style='text-align: center; color: black;'></h1>", unsafe_allow_html=True)
 
 user_input = st.text_input(
-    "Copy/Paste your amino acid sequence here: ex:     'ATFCHCRRSCYSTEYSYGTCTVMGINWRFCCL (ACP)',  'AVKDTYSCFIMRGKCRHECHDFEKPIGFCTKLNANCYM'")
+    "Copy/Paste your amino acid sequence here: 'ATFCHCRRSCYSTEYSYGTCTVMGINWRFCCL(ACP)','FLSLIPHAINAVSTLVHHF(AMP)', 'GDVSVVGFDDSPLIAFTSPPLSTVRQPVQAMATAAVGALLEEIEGNPVQRTEFVFQPELVVRGSTAQPPGRVSQVLS(DNA)'")
 # Print out the values entered by the user
-
-x = user_input.upper()
+x = re.sub("[^a-zA-Z]+", "", user_input)
+x = x.upper()
 
 if contains_specific_letters(x):
     st.write("The sequence you entered contains letters not used in ACP/APM/DNA_Binding Proteins")
@@ -53,7 +54,12 @@ else:
         
         #AMP
         amp_sample = TransformAMP(x)
-        resultsamp = amp_model.predict(amp_sample)
+        resultsamp = amp_model.predict(amp_sample) 
+
+         #DNA
+        dna_sample = TransformDNA(x)
+        resultsdna = dna_model.predict(dna_sample)
+ 
         
         st.write("The sequence you entered is:", x)
         if resultsacp == 0: 
@@ -68,5 +74,11 @@ else:
             st.write("It is an Antimicrobial Peptide")
         else:
             st.write('Undetermined AMP ') 
+        if resultsdna == 0: 
+            st.write("Not a DNA Binding Protein")
+        elif resultsdna == 1:   
+            st.write("It is a DNA Binding Protein")
+        else:
+            st.write('Undetermined DNA Binding Protein ') 
 
 
