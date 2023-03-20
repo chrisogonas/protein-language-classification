@@ -15,3 +15,5 @@ DNA_Binding: accuracy: 0.63 precision: 0.6, Recall: 0.8, f1 score: .68 Best mode
 baseline_acp.ipynb, baseline_amp.ipynb, baseline_dna.ipynb are the respective notebooks with the models
 
 Protein Sequencing and Classification-2.ipynb explores feature engineering and classification applied to all the 3 classes of proteins. It uses Bag-of-Words to classify protein sequences.
+
+![Infrastructure Duagram](InfraDiagramModExplanability.png)
