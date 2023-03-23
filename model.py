@@ -34,7 +34,7 @@ def predict(sequence, protein="ANY"):
                 return 'Negative for DNA Binding Protein'   
             
     if protein in ['AMP', 'ANY']: # AMP
-        model = pickle.load(open('xgb_amp_model.sav', 'rb'))
+        model = pickle.load(open('xgb_amp_modelMarch19.sav', 'rb'))
         sample = TransformAMP(sequence)
         if model.predict(sample) == 1:
             return 'Classified as Antimicrobial Peptide.'
