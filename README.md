@@ -16,4 +16,4 @@ baseline_acp.ipynb, baseline_amp.ipynb, baseline_dna.ipynb are the respective no
 
 Protein Sequencing and Classification-2.ipynb explores feature engineering and classification applied to all the 3 classes of proteins. It uses Bag-of-Words to classify protein sequences.
 
-![Infrastructure Duagram](InfraDiagramModExplanability.png)
+![Infrastructure Diagram](InfraDiagramModExplanability.png)
